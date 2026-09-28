@@ -1,6 +1,6 @@
-# [Project name]
+# Smart Expense Tracker
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+An authenticated personal finance workspace for tracking income, expenses, budgets, and spending patterns.
 
 ## Run & Operate
 
@@ -22,15 +22,23 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/smart-expense-tracker` — React + Vite web application and responsive product UI.
+- `artifacts/api-server` — Express API, Clerk middleware, and finance routes.
+- `lib/api-spec/openapi.yaml` — source-of-truth API contract.
+- `lib/api-client-react` — generated React Query client.
+- `lib/api-zod` — generated request and response validators.
+- `lib/db/src/schema` — Drizzle tables for expenses, income, and budgets.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Clerk owns authentication; the API scopes every financial query by the Clerk user ID.
+- OpenAPI is the contract source of truth so the frontend and server share generated types and validators.
+- Calendar dates use string-backed PostgreSQL date values to avoid timezone shifts in daily transactions.
+- New users receive a small starter dataset so the dashboard communicates its value immediately; later mutations remain fully persistent.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Users can sign in, capture income and expenses, search and filter transactions, manage monthly/category budgets, inspect analytics, and ask a spending advisor for practical guidance.
 
 ## User preferences
 
@@ -38,7 +46,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Run API codegen after changing `lib/api-spec/openapi.yaml`.
+- Run `pnpm run typecheck` after shared schema or API changes.
+- Do not expose or commit Clerk or database secrets.
 
 ## Pointers
 

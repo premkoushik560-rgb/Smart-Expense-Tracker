@@ -1,0 +1,197 @@
+Create a complete, professional **Expense Tracking Web Application** as an internship project.
+
+### Project Title
+
+**Smart Expense Tracker**
+
+### Objective
+
+Build a user-friendly web application that allows users to manage their personal finances by tracking income, expenses, budgets, and spending patterns.
+
+### Technology Stack
+
+* Frontend: HTML5, CSS3, JavaScript
+* Backend: Python Flask
+* Database: SQLite with SQLAlchemy
+* Charts: Chart.js
+* Authentication: Flask-Login
+* Password Security: Werkzeug password hashing
+* Version Control: Git/GitHub
+
+### Required Features
+
+1. **User Authentication**
+
+   * User registration
+   * Login/logout
+   * Secure password hashing
+   * User-specific data
+
+2. **Dashboard**
+
+   * Display total income
+   * Display total expenses
+   * Display current balance
+   * Display monthly expenses
+   * Display recent transactions
+   * Display highest spending category
+
+3. **Expense Management**
+
+   * Add an expense
+   * Edit an expense
+   * Delete an expense
+   * Expense amount
+   * Date
+   * Category
+   * Payment method
+   * Description
+
+4. **Income Management**
+
+   * Add income
+   * Edit income
+   * Delete income
+   * Income source
+   * Amount
+   * Date
+   * Description
+
+5. **Categories**
+   Include categories such as:
+
+   * Food
+   * Travel
+   * Shopping
+   * Education
+   * Bills
+   * Entertainment
+   * Healthcare
+   * Other
+
+6. **Budget Management**
+
+   * Set monthly budget
+   * Set category-wise budgets
+   * Display remaining budget
+   * Show warning when spending exceeds the budget
+
+7. **Reports and Analytics**
+
+   * Monthly income vs expense chart
+   * Category-wise expense chart
+   * Monthly spending trend
+   * Total savings
+   * Highest spending category
+   * Use Chart.js for visualizations
+
+8. **Search and Filters**
+
+   * Search transactions
+   * Filter by category
+   * Filter by date
+   * Filter by transaction type
+
+9. **AI Expense Advisor**
+   Add an optional AI-powered feature that analyzes the user's spending history and provides:
+
+   * Monthly spending summary
+   * Spending pattern analysis
+   * Possible areas to reduce expenses
+   * Savings suggestions
+   * Natural-language answers about spending
+
+10. **Responsive UI**
+
+* Modern and clean design
+* Mobile responsive
+* Desktop responsive
+* Navigation sidebar/navbar
+* Cards for financial statistics
+* Attractive charts
+* Proper form validation
+* Success/error notifications
+
+### Database Design
+
+Create appropriate SQLAlchemy models for:
+
+* User
+* Expense
+* Income
+* Category
+* Budget
+
+Use proper relationships between tables and ensure that each user's financial data is isolated from other users.
+
+### Project Structure
+
+Create a clean structure similar to:
+
+Expense-Tracker/
+├── app.py
+├── config.py
+├── requirements.txt
+├── models/
+├── routes/
+├── templates/
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── database/
+└── README.md
+
+### Important Requirements
+
+* Write clean and beginner-friendly Python code.
+* Follow good software engineering practices.
+* Use comments where necessary.
+* Validate all user inputs.
+* Handle errors properly.
+* Do not expose passwords or sensitive information.
+* Use environment variables for secret keys/API keys.
+* Make the application runnable locally.
+* Provide all required files and complete code.
+* Do not leave placeholder functions or incomplete sections.
+
+### Documentation
+
+Also provide:
+
+1. Project abstract
+2. Problem statement
+3. Objectives
+4. Existing system
+5. Proposed system
+6. Functional requirements
+7. Non-functional requirements
+8. System architecture
+9. Database/ER diagram description
+10. Module descriptions
+11. Testing strategy
+12. Expected results
+13. Future enhancements
+14. Conclusion
+15. GitHub README
+16. Instructions to install and run the project
+
+### Development Approach
+
+Build the project step by step.
+
+First provide the complete project architecture and database design.
+
+Then generate the code module by module, explaining where each file should be created and how the files connect to each other.
+
+Finally provide:
+
+* Installation commands
+* requirements.txt
+* Database setup
+* How to run the Flask application
+* Test cases
+* GitHub upload instructions
+* Internship project presentation points
+
+Make the final project look like a **real internship-level software project**, not a basic tutorial application.

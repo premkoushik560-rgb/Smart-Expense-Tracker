@@ -10,6 +10,14 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Dashboard and analytics operations
+  - name: transactions
+    description: Income and expense management
+  - name: budgets
+    description: Monthly and category budget management
+  - name: advisor
+    description: Spending insights and savings guidance
 paths:
   /healthz:
     get:
@@ -24,7 +32,336 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /me:
+    get:
+      operationId: getCurrentUser
+      tags: [dashboard]
+      summary: Get the signed-in user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get a financial dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /transactions:
+    get:
+      operationId: listTransactions
+      tags: [transactions]
+      summary: List transactions with optional search and filters
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [expense, income]
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Matching transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /expenses:
+    post:
+      operationId: createExpense
+      tags: [transactions]
+      summary: Add an expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExpenseInput"
+      responses:
+        "201":
+          description: Created expense
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /expenses/{id}:
+    patch:
+      operationId: updateExpense
+      tags: [transactions]
+      summary: Update an expense
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExpenseUpdate"
+      responses:
+        "200":
+          description: Updated expense
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteExpense
+      tags: [transactions]
+      summary: Delete an expense
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Expense deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /income:
+    post:
+      operationId: createIncome
+      tags: [transactions]
+      summary: Add an income entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncomeInput"
+      responses:
+        "201":
+          description: Created income
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /income/{id}:
+    patch:
+      operationId: updateIncome
+      tags: [transactions]
+      summary: Update an income entry
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncomeUpdate"
+      responses:
+        "200":
+          description: Updated income
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteIncome
+      tags: [transactions]
+      summary: Delete an income entry
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Income deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /budgets:
+    get:
+      operationId: listBudgets
+      tags: [budgets]
+      summary: List the user's budgets
+      responses:
+        "200":
+          description: Budgets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      operationId: createBudget
+      tags: [budgets]
+      summary: Create a monthly or category budget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetInput"
+      responses:
+        "201":
+          description: Created budget
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /budgets/{id}:
+    patch:
+      operationId: updateBudget
+      tags: [budgets]
+      summary: Update a budget
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BudgetUpdate"
+      responses:
+        "200":
+          description: Updated budget
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteBudget
+      tags: [budgets]
+      summary: Delete a budget
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Budget deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /analytics:
+    get:
+      operationId: getAnalytics
+      tags: [dashboard]
+      summary: Get spending analytics
+      responses:
+        "200":
+          description: Analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analytics"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /advisor:
+    post:
+      operationId: askAdvisor
+      tags: [advisor]
+      summary: Ask the expense advisor about spending
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvisorInput"
+      responses:
+        "200":
+          description: Advisor response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdvisorResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +370,144 @@ components:
           type: string
       required:
         - status
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        initials: { type: string }
+      required: [id, name, email, initials]
+    Transaction:
+      type: object
+      properties:
+        id: { type: integer }
+        type:
+          type: string
+          enum: [expense, income]
+        amount: { type: number }
+        date: { type: string, format: date }
+        category: { type: string }
+        source: { type: ["string", "null"] }
+        paymentMethod: { type: ["string", "null"] }
+        description: { type: ["string", "null"] }
+      required: [id, type, amount, date, category, source, paymentMethod, description]
+    ExpenseInput:
+      type: object
+      properties:
+        amount: { type: number, exclusiveMinimum: 0 }
+        date: { type: string, format: date }
+        category: { type: string, minLength: 1 }
+        paymentMethod: { type: string, minLength: 1 }
+        description: { type: string }
+      required: [amount, date, category, paymentMethod]
+    ExpenseUpdate:
+      allOf:
+        - $ref: "#/components/schemas/ExpenseInput"
+    IncomeInput:
+      type: object
+      properties:
+        amount: { type: number, exclusiveMinimum: 0 }
+        date: { type: string, format: date }
+        source: { type: string, minLength: 1 }
+        description: { type: string }
+      required: [amount, date, source]
+    IncomeUpdate:
+      allOf:
+        - $ref: "#/components/schemas/IncomeInput"
+    Budget:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        amount: { type: number }
+        spent: { type: number }
+        remaining: { type: number }
+        month: { type: string }
+        category: { type: ["string", "null"] }
+      required: [id, name, amount, spent, remaining, month, category]
+    BudgetInput:
+      type: object
+      properties:
+        name: { type: string, minLength: 1 }
+        amount: { type: number, exclusiveMinimum: 0 }
+        month: { type: string, pattern: '^\d{4}-\d{2}$' }
+        category: { type: ["string", "null"] }
+      required: [name, amount, month]
+    BudgetUpdate:
+      allOf:
+        - $ref: "#/components/schemas/BudgetInput"
+    DashboardSummary:
+      type: object
+      properties:
+        totalIncome: { type: number }
+        totalExpenses: { type: number }
+        balance: { type: number }
+        monthlyExpenses: { type: number }
+        savingsRate: { type: number }
+        highestCategory: { type: string }
+        highestCategoryAmount: { type: number }
+        budgetRemaining: { type: number }
+        recentTransactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+        categoryBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoryTotal"
+      required:
+        - totalIncome
+        - totalExpenses
+        - balance
+        - monthlyExpenses
+        - savingsRate
+        - highestCategory
+        - highestCategoryAmount
+        - budgetRemaining
+        - recentTransactions
+        - categoryBreakdown
+    CategoryTotal:
+      type: object
+      properties:
+        category: { type: string }
+        amount: { type: number }
+        percentage: { type: number }
+      required: [category, amount, percentage]
+    MonthlyTotal:
+      type: object
+      properties:
+        month: { type: string }
+        income: { type: number }
+        expenses: { type: number }
+        savings: { type: number }
+      required: [month, income, expenses, savings]
+    Analytics:
+      type: object
+      properties:
+        monthly: { type: array, items: { $ref: "#/components/schemas/MonthlyTotal" } }
+        categories: { type: array, items: { $ref: "#/components/schemas/CategoryTotal" } }
+        totalSavings: { type: number }
+        averageMonthlySpend: { type: number }
+        highestCategory: { type: string }
+      required: [monthly, categories, totalSavings, averageMonthlySpend, highestCategory]
+    AdvisorInput:
+      type: object
+      properties:
+        question: { type: string, minLength: 1, maxLength: 500 }
+      required: [question]
+    AdvisorResponse:
+      type: object
+      properties:
+        answer: { type: string }
+        highlights:
+          type: array
+          items: { type: string }
+      required: [answer, highlights]
 

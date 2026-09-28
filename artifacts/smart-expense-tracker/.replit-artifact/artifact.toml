@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Smart Expense Tracker"
+description = "A personal finance web app for tracking income and expenses, managing monthly budgets, exploring spending analytics, and getting practical savings guidance."
+version = "1.0.0"
+id = "artifacts/smart-expense-tracker"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19780
+
+[services.development]
+run = "pnpm --filter @workspace/smart-expense-tracker run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/smart-expense-tracker", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/smart-expense-tracker/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19780"
+BASE_PATH = "/"

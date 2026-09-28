@@ -1,0 +1,1 @@
+- [Workspace stack adaptation](stack-adaptation.md) — translate Flask/SQLite briefs into the existing TypeScript artifact stack while preserving product behavior.
